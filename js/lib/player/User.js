@@ -7,7 +7,7 @@ define(['player/Player'], function(Player) {
 	User.prototype = Object.create(Player.prototype);
 
 	User.prototype.turn = function turn(board, output) {
-		var input = prompt('linha coluna').split(/\s+/);
+		var input = prompt('row column').split(/\s+/);
 
 		return {
 			row: parseInt(input[0]),
