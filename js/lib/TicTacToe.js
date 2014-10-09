@@ -45,10 +45,14 @@ define([], function() {
 				if(this.isPlayer1) {
 					this.player2.onWin();
 					this.player1.onLose();
+
+					console.log('Player 2 won');
 				}
 				else {
 					this.player1.onWin();
 					this.player2.onLose();
+
+					console.log('Player 1 won');
 				}
 			}
 		},
@@ -79,11 +83,70 @@ define([], function() {
 			return true;
 		},
 
-		/** 
-		 * @TODO implement it
-		 */
 		hasWinner: function hasWinner() {
-			
+
+			// First three rows and first three columns
+			if (this.check(0, 1)
+				|| this.check(1, 1)
+				|| this.check(2, 1)
+
+				|| this.check(0, 2)
+				|| this.check(1, 2)
+				|| this.check(2, 2)) {
+
+				return true;
+
+			}
+
+			// First diagonal
+
+			var i = 0,
+				j = 0;
+
+			if (this.board[i][j] == this.board[i+1][j+1]
+			&& this.board[i+1][j+1] == this.board[i+2][j+2]
+			&& this.board[i][j] !== '-') {
+				return true;
+			}
+
+			// Second diagonal
+			if (this.board[i][j] == this.board[i+1][j-1]
+			&& this.board[i+1][j-1] == this.board[i+2][j-2]
+			&& this.board[i][j] !== '-') {
+				return true;
+			}
+
+
+			return false;
+		},
+
+
+		/**
+		 * @param  {Number} i    
+		 * @param  {Number} j    
+		 * @param  {Number} type says what kind of verification must be done
+		 *                       1 => same row
+		 *                       Otherwise => same column
+		 *                       
+		 * @return {Boolean}      
+		 */
+		check: function check(i, type) {
+			if (type == 1) {
+				if (this.board[i][0] == this.board[i][1]
+				&& this.board[i][1] == this.board[i][2]
+				&& this.board[i][0] !== '-') {
+
+					return true;
+				}
+			}
+
+			if (this.board[0][i] === this.board[1][i]
+			&& this.board[1][i] === this.board[2][i]
+			&& this.board[0][i] !== '-') {
+
+				return true;
+			}
+
 			return false;
 		}
 
