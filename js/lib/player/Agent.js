@@ -21,7 +21,11 @@ define(['player/Player'], function(Player) {
 
 		if(!turn) {
 			turn = this.getRandomTurn(board);
-		}
+			// console.log('Random');
+		}/*
+		else {
+			console.log('Knowledge');
+		}*/
 
 		this.currentGame[currentBoard] = turn;
 
@@ -34,11 +38,23 @@ define(['player/Player'], function(Player) {
 	};
 
 	Agent.prototype.onWin = function onWin(board) {
+		this.score++;
+		
+		this.learn(board);
+	};
+
+	Agent.prototype.onDraw = function onDraw(board) {
+		this.learn(board);
+	};
+
+	Agent.prototype.learn = function learn(board) {
 		for(var t in this.currentGame) {
-			if(this.currentGame.hasOwnProperty(t)) {
+			// if(this.currentGame.hasOwnProperty(t)) {
 				this.knowledge[t] = this.currentGame[t];
-			}
+			// }
 		}
+
+		this.knowledge['---------'] = false;
 	};
 
 	Agent.prototype.linearize = function linearize(matrix) {

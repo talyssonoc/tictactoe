@@ -1,21 +1,28 @@
-define([], function() {
+define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
-	var TicTacToe = function TicTacToe(player1, player2, output) {
-		this.player1 = player1;
-		this.player2 = player2;
-		this.output = output;
+	var TicTacToe = Backbone.Model.extend({
 
-		this.isPlayer1 = true;
-		this.board = [
-			['-', '-', '-'],
-			['-', '-', '-'],
-			['-', '-', '-']
-		];
-	};
+		initialize: function initialize(player1, player2) {
+			this.set({
+				player1: player1,
+				player2: player2
+			});
+		},
 
-	TicTacToe.prototype = {
-		
+		reset: function reset() {
+			this.set({
+				board: [
+					['-', '-', '-'],
+					['-', '-', '-'],
+					['-', '-', '-']
+				],
+				isPlayer1: true
+			});
+		},
+
 		run: function run() {
+
+			this.reset();
 
 			var currentPlayer,
 				hasWinner = false;
@@ -23,14 +30,14 @@ define([], function() {
 			// While the game is not fulfilled or nobody won yet
 			while(!this.isFull() && !hasWinner) {
 
-				if(this.isPlayer1) {
-					currentPlayer = this.player1;
+				if(this.get('isPlayer1')) {
+					currentPlayer = this.get('player1');
 				}
 				else {
-					currentPlayer = this.player2;
+					currentPlayer = this.get('player2');
 				}
 
-				this.isPlayer1 = !this.isPlayer1;
+				this.togglePlayer();
 
 				this.turn(currentPlayer);
 
@@ -42,28 +49,36 @@ define([], function() {
 			// Also says to the loser that it was defeated,
 			// so it can learn with the lost (poetic, hun?).
 			if(hasWinner) {
-				if(this.isPlayer1) {
-					this.player2.onWin();
-					this.player1.onLose();
+				if(this.get('isPlayer1')) {
+					this.get('player2').onWin();
+					this.get('player1').onLose();
 
-					console.log('Player 2 won');
+					// console.log('Player 2 won');
 				}
 				else {
-					this.player1.onWin();
-					this.player2.onLose();
+					this.get('player1').onWin();
+					this.get('player2').onLose();
 
-					console.log('Player 1 won');
+					// console.log('Player 1 won');
 				}
 			}
+			else {
+				this.get('player1').onDraw();
+				this.get('player2').onDraw();
+				// console.log('Nobody won');
+			}
+
+			this.trigger('end');
+
 		},
 
 		turn: function turn(player) {
 
-			var turn = player.turn(this.board, this.output);
+			var turn = player.turn(this.get('board')/*, this.output*/);
 
-			this.board[turn.row][turn.column] = player.getSymbol();
+			this.get('board')[turn.row][turn.column] = player.getSymbol();
 
-			this.output.update(this.board, {
+			this.trigger('update', {
 				row: turn.row,
 				column: turn.column,
 				player: player
@@ -72,9 +87,11 @@ define([], function() {
 
 		isFull: function isFull() {
 
+			var board = this.get('board');
+
 			for(var i = 0; i < 3; i++) {
 				for(var j = 0; j < 3; j++) {
-					if(this.board[i][j] === '-') {
+					if(board[i][j] === '-') {
 						return false;
 					}
 				}
@@ -83,16 +100,24 @@ define([], function() {
 			return true;
 		},
 
+		togglePlayer: function togglePlayer() {
+			var playerFlag = this.get('isPlayer1');
+
+			this.set('isPlayer1', !playerFlag);
+		},
+
 		hasWinner: function hasWinner() {
 
-			// First three rows and first three columns
-			if (this.check(0, 1)
-				|| this.check(1, 1)
-				|| this.check(2, 1)
+			var board = this.get('board');
 
-				|| this.check(0, 2)
-				|| this.check(1, 2)
-				|| this.check(2, 2)) {
+			// First three rows and first three columns
+			if (this.check(0, 1, board)
+				|| this.check(1, 1, board)
+				|| this.check(2, 1, board)
+
+				|| this.check(0, 2, board)
+				|| this.check(1, 2, board)
+				|| this.check(2, 2, board)) {
 
 				return true;
 
@@ -103,16 +128,16 @@ define([], function() {
 			var i = 0,
 				j = 0;
 
-			if (this.board[i][j] == this.board[i+1][j+1]
-			&& this.board[i+1][j+1] == this.board[i+2][j+2]
-			&& this.board[i][j] !== '-') {
+			if (board[i][j] == board[i+1][j+1]
+			&& board[i+1][j+1] == board[i+2][j+2]
+			&& board[i][j] !== '-') {
 				return true;
 			}
 
 			// Second diagonal
-			if (this.board[i][j] == this.board[i+1][j-1]
-			&& this.board[i+1][j-1] == this.board[i+2][j-2]
-			&& this.board[i][j] !== '-') {
+			if (board[i][j] == board[i+1][j-1]
+			&& board[i+1][j-1] == board[i+2][j-2]
+			&& board[i][j] !== '-') {
 				return true;
 			}
 
@@ -130,19 +155,19 @@ define([], function() {
 		 *                       
 		 * @return {Boolean}      
 		 */
-		check: function check(i, type) {
+		check: function check(i, type, board) {
 			if (type == 1) {
-				if (this.board[i][0] == this.board[i][1]
-				&& this.board[i][1] == this.board[i][2]
-				&& this.board[i][0] !== '-') {
+				if (board[i][0] == board[i][1]
+				&& board[i][1] == board[i][2]
+				&& board[i][0] !== '-') {
 
 					return true;
 				}
 			}
 
-			if (this.board[0][i] === this.board[1][i]
-			&& this.board[1][i] === this.board[2][i]
-			&& this.board[0][i] !== '-') {
+			if (board[0][i] === board[1][i]
+			&& board[1][i] === board[2][i]
+			&& board[0][i] !== '-') {
 
 				return true;
 			}
@@ -150,7 +175,7 @@ define([], function() {
 			return false;
 		}
 
-	};
+	});
 
 	return TicTacToe;
 
