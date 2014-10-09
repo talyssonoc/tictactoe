@@ -8,12 +8,12 @@ requirejs.config({
     }
 });
 
-requirejs(['TicTacToe', 'player/User', 'player/Agent', 'TicTacToeView'],
-	function(TicTacToe, User, Agent,  TicTacToeView) {
+requirejs(['TicTacToe', 'player/User', 'player/Agent', 'player/RandomAgent', 'TicTacToeView'],
+	function(TicTacToe, User, Agent, RandomAgent, TicTacToeView) {
 
 	// var player1 = new User('x'),
 	var player1 = new Agent('x'),
-		player2 = new Agent('o');
+		player2 = new RandomAgent('o');
 
 	var model = new TicTacToe(player1, player2);
 
@@ -22,15 +22,30 @@ requirejs(['TicTacToe', 'player/User', 'player/Agent', 'TicTacToeView'],
 		model: model
 	});
 
-	var games = 0;
 
-	while(games++ < 50000/*game.count() < 100*/) {
-		// console.log(games++, 'generations. ', game.count(), 'games learned');
-		game.run();
-		console.log(games++, ':', game.getCounts(), model.get('player1').score, 'x', model.get('player2').score);
+	document.train = function train() {
+		game.model.set('show', false);
+
+		game.prepareTrain();
+
+		var games = 0;
+
+		while(games++ < 1000) {
+			// console.log(games++, 'generations. ', game.count(), 'games learned');
+			game.run();
+			console.log(game.count());
+			// console.log(games++, ':', game.count(), model.get('player1').score, 'x', model.get('player2').score);
+		}
+
+		console.log(Object.keys(game.model.get('player1').knowledge));
 	}
 
-	console.log(Object.keys(game.model.get('player1').knowledge));
-	console.log(Object.keys(game.model.get('player2').knowledge));
+	document.playAgainst = function playAgainst() {
+		game.model.set('show', true);
+
+		game.preparePlayAgainst();
+
+		game.run();
+	}
 
 });

@@ -62,9 +62,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					// console.log('Player 1 won');
 				}
 			}
-			/*else {
-				console.log('Nobody won');
-			}*/
+			else {
+				this.get('player1').onDraw();
+				this.get('player2').onDraw();
+				// console.log('Nobody won');
+			}
 
 			this.trigger('end');
 

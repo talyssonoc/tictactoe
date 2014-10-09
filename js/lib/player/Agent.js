@@ -22,8 +22,8 @@ define(['player/Player'], function(Player) {
 		if(!turn) {
 			turn = this.getRandomTurn(board);
 			// console.log('Random');
-		}
-		/*else {
+		}/*
+		else {
 			console.log('Knowledge');
 		}*/
 
@@ -40,6 +40,14 @@ define(['player/Player'], function(Player) {
 	Agent.prototype.onWin = function onWin(board) {
 		this.score++;
 		
+		this.learn(board);
+	};
+
+	Agent.prototype.onDraw = function onDraw(board) {
+		this.learn(board);
+	};
+
+	Agent.prototype.learn = function learn(board) {
 		for(var t in this.currentGame) {
 			// if(this.currentGame.hasOwnProperty(t)) {
 				this.knowledge[t] = this.currentGame[t];

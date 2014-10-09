@@ -14,7 +14,10 @@ define([], function() {
 	Player.prototype.onWin = function onWin(board) {
 		this.score++;
 	};
+
 	Player.prototype.onLose = function onLose(board) {};
+
+	Player.prototype.onDraw = function onDraw(board) {};
 
 	return Player;
 });

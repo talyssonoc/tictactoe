@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'player/User'], function($, _, Backbone, User) {
+define(['jquery', 'underscore', 'backbone', 'player/User', 'player/RandomAgent'], function($, _, Backbone, User, RandomAgent) {
 
 	var TicTacToeView = Backbone.View.extend({
 
@@ -37,26 +37,19 @@ define(['jquery', 'underscore', 'backbone', 'player/User'], function($, _, Backb
 		},
 
 		count: function count() {
-			return Math.max(Object.keys(this.model.get('player1').knowledge).length,
-							Object.keys(this.model.get('player2').knowledge).length);
+			return Object.keys(this.model.get('player1').knowledge).length;
 		},
-
-		getCounts: function getCounts() {
-			return (Object.keys(this.model.get('player1').knowledge).length
-				+ ' ' + Object.keys(this.model.get('player2').knowledge).length);
-		},
-
-		toggleShow: function toggleShow() {
-			this.model.set('show', !this.model.get('show'));
-		},
-
 
 		showKnowledge: function showKnowledge() {
 			console.log(this.model.get('player1').knowledge)
 		},
 
-		change: function change() {
+		preparePlayAgainst: function preparePlayAgainst() {
 			this.model.set('player2', new User('o'));
+		},
+
+		prepareTrain: function prepareTrain() {
+			this.model.set('player2', new RandomAgent('o'));
 		}
 
 	});
