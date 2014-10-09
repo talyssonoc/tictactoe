@@ -30,14 +30,20 @@ requirejs(['TicTacToe', 'player/User', 'player/Agent', 'player/RandomAgent', 'Ti
 
 		var games = 0;
 
-		while(games++ < 1000) {
+		var generations = prompt('Generations');
+
+		if(!generations) {
+			return;
+		}
+
+		while(games++ < parseInt(generations)) {
 			// console.log(games++, 'generations. ', game.count(), 'games learned');
 			game.run();
-			console.log(game.count());
+			// console.log(game.count());
 			// console.log(games++, ':', game.count(), model.get('player1').score, 'x', model.get('player2').score);
 		}
 
-		console.log(Object.keys(game.model.get('player1').knowledge));
+		game.showKnowledge();
 	}
 
 	document.playAgainst = function playAgainst() {

@@ -1,0 +1,72 @@
+body,
+html {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	display: table;
+}
+
+table {
+	margin: 10px;
+
+	border-collapse: collapse;
+	display: inline-table;
+}
+
+table tr,
+table td {
+	border-color: black;
+	border-style: double;
+	border-width: 0;
+}
+
+table tr {
+	border-bottom-width: 3px;
+}
+
+table tr:last-of-type {
+	border-bottom: none;
+}
+
+table td {
+	border-right-width: 3px;
+	height: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+
+	font-family: Arial;
+	font-size: 25px;
+	font-weight: bold;
+}
+
+table td:last-of-type {
+	border-right: none;
+}
+
+table td.agent {
+	color: blue;
+}
+
+table td.user {
+	color: red;
+}
+
+
+#game {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+textarea {
+	display: none;
+	width: 100px;
+	height: 100px;
+	margin: 10px;
+	resize: none;
+}

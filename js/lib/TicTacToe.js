@@ -50,21 +50,21 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			// so it can learn with the lost (poetic, hun?).
 			if(hasWinner) {
 				if(this.get('isPlayer1')) {
-					this.get('player2').onWin();
-					this.get('player1').onLose();
+					this.get('player2').onWin(this.get('board'), this.get('player1'));
+					this.get('player1').onLose(this.get('board'), this.get('player2'));
 
 					// console.log('Player 2 won');
 				}
 				else {
-					this.get('player1').onWin();
-					this.get('player2').onLose();
+					this.get('player1').onWin(this.get('board'), this.get('player2'));
+					this.get('player2').onLose(this.get('board'), this.get('player1'));
 
 					// console.log('Player 1 won');
 				}
 			}
 			else {
-				this.get('player1').onDraw();
-				this.get('player2').onDraw();
+				this.get('player1').onDraw(this.get('board'), this.get('player2'));
+				this.get('player2').onDraw(this.get('board'), this.get('player1'));
 				// console.log('Nobody won');
 			}
 
@@ -74,7 +74,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 		turn: function turn(player) {
 
-			var turn = player.turn(this.get('board')/*, this.output*/);
+			var turn = player.getTurn(this.get('board'));
 
 			this.get('board')[turn.row][turn.column] = player.getSymbol();
 

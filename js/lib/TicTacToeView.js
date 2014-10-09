@@ -32,7 +32,10 @@ define(['jquery', 'underscore', 'backbone', 'player/User', 'player/RandomAgent']
 
 		update: function update(turn) {
 			if(this.model.get('show')) {
+				var player = (turn.player.getSymbol() == 'x' ? 'agent' : 'user');
+
 				this.$el.find('#' + turn.row + turn.column).text(turn.player.getSymbol());
+				this.$el.find('#' + turn.row + turn.column).addClass(player);
 			}
 		},
 
@@ -41,7 +44,10 @@ define(['jquery', 'underscore', 'backbone', 'player/User', 'player/RandomAgent']
 		},
 
 		showKnowledge: function showKnowledge() {
-			console.log(this.model.get('player1').knowledge)
+			var textarea = $('textarea');
+
+			textarea.slideDown();
+			textarea.val(JSON.stringify(this.model.get('player1').knowledge));
 		},
 
 		preparePlayAgainst: function preparePlayAgainst() {
@@ -49,6 +55,8 @@ define(['jquery', 'underscore', 'backbone', 'player/User', 'player/RandomAgent']
 		},
 
 		prepareTrain: function prepareTrain() {
+			$('textarea').slideUp();
+
 			this.model.set('player2', new RandomAgent('o'));
 		}
 
