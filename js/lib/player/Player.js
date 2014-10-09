@@ -2,6 +2,7 @@ define([], function() {
 
 	var Player = function Player(symbol) {
 		this.symbol = symbol;
+		this.score = 0;
 	};
 
 	Player.prototype.getSymbol = function getSymbol() {
@@ -10,7 +11,9 @@ define([], function() {
 
 	Player.prototype.init = function init() {};
 
-	Player.prototype.onWin = function onWin(board) {};
+	Player.prototype.onWin = function onWin(board) {
+		this.score++;
+	};
 	Player.prototype.onLose = function onLose(board) {};
 
 	return Player;
