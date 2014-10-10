@@ -123,21 +123,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			}
 
-			// First diagonal
-
-			var i = 0,
-				j = 0;
-
-			if (board[i][j] == board[i+1][j+1]
-			&& board[i+1][j+1] == board[i+2][j+2]
-			&& board[i][j] !== '-') {
+			// Main diagonal
+			if (board[0][0] == board[1][1]
+			&& board[1][1] == board[2][2]
+			&& board[1][1] !== '-') {
 				return true;
 			}
 
 			// Second diagonal
-			if (board[i][j] == board[i+1][j-1]
-			&& board[i+1][j-1] == board[i+2][j-2]
-			&& board[i][j] !== '-') {
+			if (board[0][2] == board[1][1]
+			&& board[1][1] == board[2][0]
+			&& board[1][1] !== '-') {
 				return true;
 			}
 

@@ -39,7 +39,7 @@ requirejs(['TicTacToe', 'player/User', 'player/Agent', 'player/RandomAgent', 'Ti
 		while(games++ < parseInt(generations)) {
 			// console.log(games++, 'generations. ', game.count(), 'games learned');
 			game.run();
-			// console.log(game.count());
+			console.log(game.count());
 			// console.log(games++, ':', game.count(), model.get('player1').score, 'x', model.get('player2').score);
 		}
 
